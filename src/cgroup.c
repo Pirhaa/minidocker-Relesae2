@@ -48,6 +48,23 @@ static void cg_dir(int pid, char *out, size_t size) {
 
 // 1. LIMIT LAGANE WALA FUNCTION (works for a container or any running PID)
 int limit_pid(int pid, const char *mem, const char *pids) {
+
+    if(pid < 100){
+
+      printf("Scurity Error: PID %d is system process ,so you cannotput limit on it", pid);
+      return 1;
+
+     }
+
+    //Memory conversion
+  
+  if(mem[strlen(mem)-1] == 'M' || mem[strlen(mem)-1] == 'm'){
+
+     static char b[20];
+    sprintf(b, "%lld", atoll(mem) * 1024 * 1024);
+    mem=b;
+
+   }
     char dir[256], path[300], pid_str[16];
 
     cg_dir(pid, dir, sizeof(dir));
