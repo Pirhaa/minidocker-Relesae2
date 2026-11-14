@@ -51,17 +51,17 @@ static int child_main(void *arg) {
         return 1;
     }
 
-    // 6. /proc mount karo (PID namespace ka /proc)
+    
     if (mount("proc", "/proc", "proc", 0, NULL) != 0)
         perror("mount /proc");
 
-    // 7. Command chalao
+   
     execv(a->cmd[0], a->cmd);
     perror("execv");
     return 1;
 }
 
-int run_container(const char *image, char *const argv[], const char *mem, const char *pids) {
+int run_container(const char *image, char *const argv[], const char *mem, const char *pids, const char *cpu) {
     struct child_args args;
     int status;
 
@@ -97,7 +97,7 @@ int run_container(const char *image, char *const argv[], const char *mem, const 
     printf("Container started, host PID = %d (mem=%s, pids=%s)\n", pid, mem, pids);
 
     // PEHLE limit lagao, PHIR child ko "go" do, taake child limit ke bagair na chale
-    if (limit_pid(pid, mem, pids) != 0)
+    if (limit_pid(pid, mem, pids,cpu) != 0)
         printf("Warning: cgroup limits failed\n");
 
     if (write(args.pipefd[1], "g", 1) != 1)
