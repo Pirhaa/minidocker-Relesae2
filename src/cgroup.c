@@ -46,8 +46,7 @@ static void cg_dir(int pid, char *out, size_t size) {
     snprintf(out, size, CG_ROOT "/minidocker/p%d", pid);
 }
 
-// 1. LIMIT LAGANE WALA FUNCTION (works for a container or any running PID)
-int limit_pid(int pid, const char *mem, const char *pids) {
+int limit_pid(int pid, const char *mem, const char *pids, const char *cpu) {
 
     if(pid < 100){
 
@@ -90,9 +89,19 @@ int limit_pid(int pid, const char *mem, const char *pids) {
     if (write_file(path, pids, 0) != 0)
         return -1;
 
+     if (cpu != NULL && strlen(cpu) > 0) {
+        snprintf(path, sizeof(path), "%s/cpu.max", dir);
+        if (write_file(path, cpu, 0) != 0) {
+            printf("Warning: CPU limit failed (kernel may not support it)\n");
+        } else {
+            printf("CPU limit applied: %s\n", cpu);
+        }
+    }
+
     // Process ko cgroup mein daalo (limits yahan se lagu hoti hain)
     snprintf(path, sizeof(path), "%s/cgroup.procs", dir);
     snprintf(pid_str, sizeof(pid_str), "%d", pid);
+    snprintf(path, sizeof(path), "%s/cgroup.procs", dir);
     if (write_file(path, pid_str, 0) != 0)
         return -1;
 
@@ -124,6 +133,10 @@ void show_status(int pid) {
     snprintf(path, sizeof(path), "%s/pids.max", dir);
     if (read_file(path, buf, sizeof(buf)) == 0)
         printf("PIDs Limit  : %s\n", buf);
+
+     snprintf(path, sizeof(path), "%s/cpu.max", dir);
+    if (read_file(path, buf, sizeof(buf)) == 0)
+        printf("CPU Limit   : %s\n", buf);
 
     // memory.events has a line like "oom_kill 3" -- read the real number
     snprintf(path, sizeof(path), "%s/memory.events", dir);
