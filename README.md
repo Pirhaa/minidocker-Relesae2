@@ -4,7 +4,7 @@ A small container runtime for Linux, written in C. It runs a program in its own 
 
 ## About the Project
 
-**Mini Docker** is the semester project for the Operating Systems course (CS251) at Sukkur IBA University.
+**Mini Docker** is the semester project for the Operating Systems course  at Sukkur IBA University.
 
 Tools like Docker look complicated from outside, but they are built on a few features of the Linux kernel. This project uses those features directly, so we can see how an operating system keeps one application separate from the rest of the machine.
 
@@ -33,7 +33,7 @@ You start a container with one command. The runtime gives it a separate view of 
 - [x] CPU limit (cgroups v2).
 - [x] Process monitoring from `/proc`.
 - [x] OOM kill detection and cleanup when the container exits.
-- [ ] Security restrictions using Seccomp / Linux capabilities (future work).
+
 
 ## Technology Stack
 
@@ -282,14 +282,5 @@ exit                                     # status shows PIDs Limit : 5
 | Araza Memon | 053-24-0020  |
 | Sumera Naz  | 053-24-00023 |
 
-## Project Information
-
-- **University:** Sukkur IBA University
-- **Department:** Computer Science
-- **Course:** CS251 – Operating Systems
-- **Program:** BS Software Engineering
-- **Semester:** BS-V
-- **Session:** Fall 2026
-- **Instructor:** Sir Abbas Mehdi
 
 
