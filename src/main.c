@@ -10,7 +10,7 @@
 static void usage(void) {
     printf("Usage:\n"
            "  minidocker list                                  processes, biggest memory first\n"
-           "  minidocker run [--mem 50M] [--pids 20] <image> [cmd...]\n"
+           "  minidocker run [--mem 50M] [--pids 20] [--cpu \"50000 100000\"]  <image> [cmd...]\n"
            "  minidocker limit <pid> <mem> <pids>              limit a running process (e.g. 50M 20)\n"
            "  minidocker status <pid>                          RUNNING / EXITED / KILLED (OOM)\n"
            "  minidocker stop <pid>                            SIGTERM, then SIGKILL if needed\n");
@@ -25,7 +25,7 @@ static int valid_num(const char *s) {
     return 1;
 }
 
-// "max", or digits with an optional K/M/G at the end (e.g. 50M)
+
 static int valid_mem(const char *s) {
     char buf[32];
     size_t n = strlen(s);
@@ -88,7 +88,7 @@ int main(int argc, char **argv) {
     }
 
     if (strcmp(argv[1], "run") == 0) {
-        const char *mem = "50M", *pids = "20";
+        const char *mem = "50M", *pids = "20",  *cpu = NULL;
         int i = 2;
 
         while (i < argc && strncmp(argv[i], "--", 2) == 0) {
@@ -96,6 +96,9 @@ int main(int argc, char **argv) {
                 mem = argv[i + 1];
             } else if (strcmp(argv[i], "--pids") == 0 && i + 1 < argc) {
                 pids = argv[i + 1];
+            } 
+            else if (strcmp(argv[i], "--cpu") == 0 && i + 1 < argc) { // <-- yahan se
+                cpu = argv[i + 1];
             } else {
                 usage();
                 return 1;
@@ -111,7 +114,7 @@ int main(int argc, char **argv) {
         const char *image = argv[i++];
         char *default_cmd[] = {"/bin/sh", NULL};
         char *const *cmd = (i < argc) ? &argv[i] : default_cmd;
-        return run_container(image, cmd, mem, pids);
+        return run_container(image, cmd, mem, pids, cpu);
     }
 
     usage();
