@@ -11,7 +11,7 @@
 
 #define CG_ROOT "/sys/fs/cgroup"
 
-// Lab 5: open, write, close. Returns 0 on success, -1 on failure.
+
 static int write_file(const char *path, const char *value, int quiet) {
     int fd = open(path, O_WRONLY);
     if (fd < 0) {
@@ -27,7 +27,7 @@ static int write_file(const char *path, const char *value, int quiet) {
     return 0;
 }
 
-// Lab 5: open, read, close. Strips the trailing newline.
+
 static int read_file(const char *path, char *buf, size_t size) {
     int fd = open(path, O_RDONLY);
     if (fd < 0)
@@ -68,13 +68,13 @@ int limit_pid(int pid, const char *mem, const char *pids, const char *cpu) {
 
     cg_dir(pid, dir, sizeof(dir));
 
-    mkdir(CG_ROOT "/minidocker", 0755);     // already exists is fine
+    mkdir(CG_ROOT "/minidocker", 0755);     
     if (mkdir(dir, 0755) != 0 && errno != EEXIST) {
         perror(dir);
         return -1;
     }
 
-    // Controllers enable karo (parent ko batana parta hai, tab child mein files aati hain)
+  
     write_file(CG_ROOT "/cgroup.subtree_control", "+memory +pids", 1);
     write_file(CG_ROOT "/minidocker/cgroup.subtree_control", "+memory +pids", 1);
 
@@ -82,7 +82,7 @@ int limit_pid(int pid, const char *mem, const char *pids, const char *cpu) {
     if (write_file(path, mem, 0) != 0)
         return -1;
 
-    snprintf(path, sizeof(path), "%s/memory.swap.max", dir);   // best effort
+    snprintf(path, sizeof(path), "%s/memory.swap.max", dir);   
     write_file(path, "0", 1);
 
     snprintf(path, sizeof(path), "%s/pids.max", dir);
@@ -98,7 +98,7 @@ int limit_pid(int pid, const char *mem, const char *pids, const char *cpu) {
         }
     }
 
-    // Process ko cgroup mein daalo (limits yahan se lagu hoti hain)
+ 
     snprintf(path, sizeof(path), "%s/cgroup.procs", dir);
     snprintf(pid_str, sizeof(pid_str), "%d", pid);
     snprintf(path, sizeof(path), "%s/cgroup.procs", dir);
@@ -108,7 +108,7 @@ int limit_pid(int pid, const char *mem, const char *pids, const char *cpu) {
     return 0;
 }
 
-// 2. STATUS DIKHANE WALA FUNCTION
+
 void show_status(int pid) {
     char dir[256], path[300], buf[512];
     long oom_kills = 0;
@@ -138,7 +138,7 @@ void show_status(int pid) {
     if (read_file(path, buf, sizeof(buf)) == 0)
         printf("CPU Limit   : %s\n", buf);
 
-    // memory.events has a line like "oom_kill 3" -- read the real number
+ 
     snprintf(path, sizeof(path), "%s/memory.events", dir);
     if (read_file(path, buf, sizeof(buf)) == 0) {
         p = strstr(buf, "oom_kill ");
@@ -154,7 +154,6 @@ void show_status(int pid) {
         printf("Result: EXITED normally\n");
 }
 
-// 3. CLEANUP WALA FUNCTION
 void cleanup_cgroup(int pid) {
     char dir[256];
     cg_dir(pid, dir, sizeof(dir));
