@@ -103,7 +103,7 @@ void print_status(int pid) {
     fclose(f);
 }
 
-// A zombie has already finished (Lab 6, Sec 9), so it does not count as alive
+// A zombie has already finished  so it does not count as alive
 int process_alive(int pid) {
     char path[64], line[256];
     int alive = 0;
@@ -123,7 +123,7 @@ int process_alive(int pid) {
     return alive;
 }
 
-// Lab 6, Sec 7: plain kill (SIGTERM) first, SIGKILL only as a last resort
+ //plain kill (SIGTERM) first
 int stop_process(int pid) {
     if (pid <= 1 || pid == getpid()) {
         printf("Refusing to stop PID %d\n", pid);
