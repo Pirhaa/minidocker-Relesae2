@@ -18,20 +18,20 @@ struct child_args {
     char *const *cmd;
     int pipefd[2];
     char id[32];           // unique per container, e.g. c4821
-    char merged_dir[256];  // Overlay ke liye
+    char merged_dir[256];  // Overlay 
 };
 
 static int child_main(void *arg) {
     struct child_args *a = (struct child_args *)arg;
     char c;
 
-    // 1. Pipe synchronization (Lab 8): parent ke "go" tak ruko
+    
     close(a->pipefd[1]);
     if (read(a->pipefd[0], &c, 1) != 1)
         return 1;
     close(a->pipefd[0]);
 
-    // 2. Hostname set karo (UTS namespace)
+    // 2. Set Hostname 
     sethostname("minidocker", 10);
 
     // 3. Mount private (Mount namespace)
@@ -92,11 +92,10 @@ int run_container(const char *image, char *const argv[], const char *mem, const 
         return 1;
     }
 
-    close(args.pipefd[0]);   // parent sirf likhta hai (Lab 8 rule)
+    close(args.pipefd[0]);   
 
     printf("Container started, host PID = %d (mem=%s, pids=%s)\n", pid, mem, pids);
 
-    // PEHLE limit lagao, PHIR child ko "go" do, taake child limit ke bagair na chale
     if (limit_pid(pid, mem, pids,cpu) != 0)
         printf("Warning: cgroup limits failed\n");
 
