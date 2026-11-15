@@ -97,7 +97,7 @@ int main(int argc, char **argv) {
             } else if (strcmp(argv[i], "--pids") == 0 && i + 1 < argc) {
                 pids = argv[i + 1];
             } 
-            else if (strcmp(argv[i], "--cpu") == 0 && i + 1 < argc) { // <-- yahan se
+            else if (strcmp(argv[i], "--cpu") == 0 && i + 1 < argc) { 
                 cpu = argv[i + 1];
             } else {
                 usage();
