@@ -75,8 +75,8 @@ int limit_pid(int pid, const char *mem, const char *pids, const char *cpu) {
     }
 
   
-    write_file(CG_ROOT "/cgroup.subtree_control", "+memory +pids", 1);
-    write_file(CG_ROOT "/minidocker/cgroup.subtree_control", "+memory +pids", 1);
+    write_file(CG_ROOT "/cgroup.subtree_control", "+cpu +memory +pids", 1);
+    write_file(CG_ROOT "/minidocker/cgroup.subtree_control", "+cpu +memory +pids", 1);
 
     snprintf(path, sizeof(path), "%s/memory.max", dir);
     if (write_file(path, mem, 0) != 0)

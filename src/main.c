@@ -79,7 +79,7 @@ int main(int argc, char **argv) {
         int pid = parse_pid(argv[2]);
         if (pid < 0 || !valid_mem(argv[3]) || !valid_num(argv[4])) { usage(); return 1; }
         if (need_root()) return 1;
-        if (limit_pid(pid, argv[3], argv[4]) != 0) {
+        if (limit_pid(pid, argv[3], argv[4], NULL) != 0) {
             printf("Error: could not apply limits to PID %d\n", pid);
             return 1;
         }

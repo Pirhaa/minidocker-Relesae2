@@ -24,7 +24,7 @@ int setup_overlay(const char *base, const char *id, char *merged_out) {
    
     snprintf(opts, sizeof(opts), "lowerdir=%s,upperdir=%s,workdir=%s", lower, upper, work);
 
-    printf("[Overlay] Setup chal raha hai...\n");
+    printf("[Overlay] Setup in progress...\n");
 
     if (mount("overlay", merged_out, "overlay", 0, opts) != 0) {
         perror("Overlay mount failed");
